@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Signup</title>
+  <%= stylesheet_link_tag    'application', media: 'all', 'data-turbolinks-track' => true %>
+  <%= javascript_include_tag 'application', 'data-turbolinks-track' => true %>
+  <%= csrf_meta_tags %>
+</head>
+<body>
+  <ul>
+    <li><%= link_to "Home", root_path %></li>
+    <% if is_logged_in %>
+      <li><%= link_to 'Logout', logout_path %></li>
+    <% end %>
+  </ul>
+<% if !flash.empty? %>
+  <ul>
+  <% flash.each do |key, value| %>
+    <li><%= "#{value}" %></li>
+  <% end %>
+  </ul>
+<% end %>
+
+<%= yield %>
+<%= debug(params) if Rails.env.development? %>
+</body>
+</html>
