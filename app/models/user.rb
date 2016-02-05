@@ -1,6 +1,7 @@
 require 'bcrypt'
 
 class User < ActiveRecord::Base
+
   include BCrypt
   
   has_secure_password
@@ -10,24 +11,22 @@ class User < ActiveRecord::Base
 
   attr_accessor :remember_token
 
-def User.newToken
+def newToken
 	SecureRandom.urlsafe_base64
 end
 
-def User.remember_me(user)
-	token = Password.create(newToken)
-	self.remember_token = token
-  user.update_attribute(:remember_digest, token)
+def remember_me
+	self.remember_token = newToken
+  	update_attribute(:remember_digest, Password.create(remember_token))
 end
 
-def User.forget_remember_id(user)
-  if !user.nil?
-    user.update_attribute(:remember_digest, nil)
-  end
+def forget_remember_id
+   	update_attribute(:remember_digest, nil)
 end
 
-def isDigestAuthenticated(:column, string)
-  Password.new(:column).is_password?(string)
+def isDigestAuthenticated(string)
+	return false if remember_digest.nil? || string.nil?
+	Password.new(remember_digest).is_password?(string)
 end
 
 end

@@ -10,7 +10,7 @@ default: &default
   reconnect: false
   pool: 5
   username: root
-  password:
+  password: root
   host: localhost
   timeout: 5000
 

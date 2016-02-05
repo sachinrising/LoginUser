@@ -7,14 +7,10 @@ class SessionsController < ApplicationController
     @user = User.find_by_email(params[:session][:email])
 
     if @user && @user.authenticate(params[:session][:password])
-      session[:user_id] = @user.id
-      #debugger
       
-      if params[:session][:remember].to_i == 1
-        User.remember_me(@user)
-        cookies.permanent.signed[:user_id] = @user.id
-        cookies.permanent.signed[:remember_id] = @user.remember_token
-      end
+      session[:user_id] = @user.id
+      
+      params[:session][:remember] = 1 ? remember_me(@user) : @user.forget_remember_id
 
       flash[:success] = "User is successfully logged in"
       redirect_to '/'
@@ -25,7 +21,11 @@ class SessionsController < ApplicationController
   end
   
   def destroy
-    log_out
+    
+    if is_logged_in
+      log_out
+    end
+
     flash[:success] = "User is successfully logged out."
     redirect_to '/'
   end
