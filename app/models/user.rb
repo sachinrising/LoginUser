@@ -29,4 +29,9 @@ def isDigestAuthenticated(string)
 	Password.new(remember_digest).is_password?(string)
 end
 
+def send_activation
+  debugger
+  UserMailer.account_activation(self).deliver_now
+end
+
 end

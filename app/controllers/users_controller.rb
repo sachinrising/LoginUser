@@ -9,7 +9,8 @@ class UsersController < ApplicationController
     if @user && @user.save
       session[:user_id] = @user.id
       flash[:success] = "User is successfully signed up"
-      redirect_to @user
+      @user.send_activation
+      redirect_to '/'
     else
       flash[:danger] = "User is not successfully created"
       render 'new'
